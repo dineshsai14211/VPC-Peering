@@ -1,0 +1,28 @@
+name: VPC Peering IAC pipeline
+
+on:
+  push:
+    branches:
+      - main 
+env:
+  GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.10.0
+
+    - name: Terraform Init
+      run: | 
+        terraform init
+        terraform plan
+        terraform destroy -auto-approve
+   
